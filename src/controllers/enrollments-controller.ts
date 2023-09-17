@@ -20,7 +20,6 @@ export async function postCreateOrUpdateEnrollment(req: AuthenticatedRequest, re
   return res.sendStatus(httpStatus.OK);
 }
 
-// TODO - Receber o CEP do usuário por query params.
 export async function getAddressFromCEP(req: AuthenticatedRequest | Request, res: Response) {
   const {cep}: { cep?: string} = req.query as { cep?: string };
   const address = await enrollmentsService.getAddressFromCEP(Number(cep));
