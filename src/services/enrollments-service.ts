@@ -1,12 +1,14 @@
 import { Address, Enrollment } from '@prisma/client';
-import { notFoundError } from '@/errors';
+import { notFoundError, requestError } from '@/errors';
 import { addressRepository, CreateAddressParams, enrollmentRepository, CreateEnrollmentParams } from '@/repositories';
 import { exclude } from '@/utils/prisma-utils';
 import validateCep from '@/utils/validateCep';
 
-async function getAddressFromCEP(cep: number) {
+async function getAddressFromCEP(cep: string) {
   
-  const result = await validateCep(cep);
+  const cepForm = cep;
+  const cepFormatted = cepForm.replace("-", "")
+  const result = await validateCep(cepFormatted);
 
   const formattedAddress = {
     logradouro: result.logradouro,
@@ -22,7 +24,7 @@ async function getAddressFromCEP(cep: number) {
 async function getOneWithAddressByUserId(userId: number): Promise<GetOneWithAddressByUserIdResult> {
   const enrollmentWithAddress = await enrollmentRepository.findWithAddressByUserId(userId);
 
-  if (!enrollmentWithAddress) throw notFoundError();
+  if (!enrollmentWithAddress) throw requestError(400, "Bad Request");
 
   const [firstAddress] = enrollmentWithAddress.Address;
   const address = getFirstAddress(firstAddress);
@@ -52,7 +54,7 @@ async function createOrUpdateEnrollmentWithAddress(params: CreateOrUpdateEnrollm
   const cep = params.address.cep;
   const cepFormatted = cep.replace("-", "")
 
-  await validateCep(Number(cepFormatted));
+  await validateCep(cepFormatted);
 
   const newEnrollment = await enrollmentRepository.upsert(params.userId, enrollment, exclude(enrollment, 'userId'));
 
