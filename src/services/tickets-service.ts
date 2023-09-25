@@ -1,4 +1,3 @@
-import { PostTicket } from "@/controllers";
 import { notFoundError, requestError } from "@/errors";
 import { enrollmentRepository, ticketsRepository } from "@/repositories"
 import httpStatus from "http-status";
@@ -10,8 +9,11 @@ async function getTicketType() {
 }
 
 async function getTicket(userId: number) {
-    const ticket = await ticketsRepository.getTicket(userId)
-    console.log(ticket)
+    if(!userId) throw notFoundError();
+    const enrollmentId = await enrollmentRepository.findEnrollmentIdByUserId(userId);
+    if(!enrollmentId)throw notFoundError()
+
+    const ticket = await ticketsRepository.getTicket(enrollmentId);
     if(!ticket) throw notFoundError();
     return ticket;
 }

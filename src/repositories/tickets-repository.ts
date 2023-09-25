@@ -1,5 +1,4 @@
 import { prisma } from "@/config"
-import { PostTicket } from "@/controllers";
 import { TicketType } from "@prisma/client"
 
 export type GetTicketType = Omit<TicketType, 'id'>
@@ -8,9 +7,9 @@ async function getTicketType() {
     return tickets;
 }
 
-async function getTicket(userId: number) {
+async function getTicket(enrollmentId: number) {
     const tickets = await prisma.ticket.findUnique({
-        where: {enrollmentId: userId},
+        where: {enrollmentId},
         select: {
             id: true,
             status: true,
