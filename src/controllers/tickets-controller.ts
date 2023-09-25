@@ -8,12 +8,14 @@ async function getTicketType(req: AuthenticatedRequest, res: Response) {
     return res.status(httpStatus.OK).send(tickets);
 }
 
-async function getTicket() {
-    await ticketsService.getTicket()
+async function getTicket(req: AuthenticatedRequest, res: Response) {
+   const ticket = await ticketsService.getTicket()
+   return res.status(httpStatus.OK).send(ticket);
 }
 
 async function postTicket() {
     await ticketsService.postTicket()
+    return;
 }
 
 export const ticketsController = {
