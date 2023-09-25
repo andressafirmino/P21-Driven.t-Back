@@ -2,7 +2,7 @@ import { ticketsRepository } from "@/repositories"
 
 
 async function getTicketType() {
-    await ticketsRepository.getTicketType()
+    return await ticketsRepository.getTicketType()
 }
 
 async function getTicket() {

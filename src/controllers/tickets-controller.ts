@@ -1,7 +1,11 @@
+import { AuthenticatedRequest } from "@/middlewares"
 import { ticketsService } from "@/services"
+import { Response } from "express"
+import httpStatus from "http-status";
 
-async function getTicketType() {
-    await ticketsService.getTicketType()
+async function getTicketType(req: AuthenticatedRequest, res: Response) {
+    const tickets = await ticketsService.getTicketType();
+    return res.status(httpStatus.OK).send(tickets);
 }
 
 async function getTicket() {
