@@ -11,7 +11,7 @@ async function getTicketType() {
 async function getTicket() {
     const ticket = await ticketsRepository.getTicket()
     if(ticket.length === 0) throw notFoundError();
-    return ticket;
+    return ticket[0];
 }
 
 async function postTicket(ticketTypeId: PostTicket) {
