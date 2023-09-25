@@ -1,4 +1,5 @@
 import { prisma } from "@/config"
+import { PaymentProcess } from "@/protocols";
 
 async function getPayment(ticketId: number) {
     const ticket = await prisma.payment.findUnique({
@@ -7,7 +8,7 @@ async function getPayment(ticketId: number) {
     return ticket;
 }
 
-async function postPayment() {
+async function postPayment(body: PaymentProcess) {
     
 }
 

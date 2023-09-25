@@ -1,3 +1,5 @@
+import { type } from "os";
+
 export type ApplicationError = {
   name: string;
   message: string;
@@ -33,4 +35,15 @@ export type PostTicket = {
 
 export type TicketId = {
   ticketId: string
+}
+
+export type PaymentProcess = {
+  ticketId: number,
+  cardData: {
+    issuer: string,
+    number: number,
+    name: string,
+    expirationDate: Date,
+    cvv: number
+  }
 }

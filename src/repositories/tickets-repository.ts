@@ -61,12 +61,17 @@ async function getTicketById(ticketId: number) {
 async function getTicketByUserId(userId: number, ticketId: number) {
     const ticket = await prisma.$queryRaw(
         Prisma.sql`
-        SELECT t.id, e."userId"
-        FROM ticket as t
-        JOIN enrollment as e ON t.id = $1
-        WHERE e."userId" = $2
-        `, [ticketId, userId]
-    )
+  SELECT
+    "Ticket".*
+  FROM
+    "Enrollment"
+  INNER JOIN
+    "Ticket" ON "Enrollment"."id" = "Ticket"."enrollmentId"
+  WHERE
+    "Enrollment"."userId" = ${userId}
+    AND
+    "Ticket"."id" = ${ticketId}
+;`)
     return ticket;
 }
 
