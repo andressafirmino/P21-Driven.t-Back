@@ -13,15 +13,17 @@ async function getTicketType(req: AuthenticatedRequest, res: Response) {
 }
 
 async function getTicket(req: AuthenticatedRequest, res: Response) {
-   const ticket = await ticketsService.getTicket()
+   const userId = req.userId;
+   const ticket = await ticketsService.getTicket(userId)
    return res.status(httpStatus.OK).send(ticket);
 }
 
 async function postTicket(req: AuthenticatedRequest, res: Response) {
-    const {ticketTypeId} = req.body as PostTicket
+    const userId = req.userId;
+    const {ticketTypeId} = req.body as {ticketTypeId: number}
 
-    //await ticketsService.postTicket(ticketTypeId)
-    return;
+    const ticket = await ticketsService.postTicket(userId, ticketTypeId)
+    return res.status(httpStatus.CREATED).send(ticket);
 }
 
 export const ticketsController = {

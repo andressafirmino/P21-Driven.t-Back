@@ -8,8 +8,9 @@ async function getTicketType() {
     return tickets;
 }
 
-async function getTicket() {
-    const tickets = await prisma.ticket.findMany({
+async function getTicket(userId: number) {
+    const tickets = await prisma.ticket.findUnique({
+        where: {enrollmentId: userId},
         select: {
             id: true,
             status: true,
@@ -33,12 +34,28 @@ async function getTicket() {
     return tickets;
 }
 
-async function postTicket(ticketTypeId: PostTicket) {
+async function checkUser(userId: number) {
+    const user = await prisma.enrollment.aggregate({
+        _count: {userId: true},
+        where: {userId}
+    })
+    return user;
+}
 
+async function postTicket(enrollmentId: number, ticketTypeId: number) {
+    const ticket = await prisma.ticket.create({
+        data:{
+            ticketTypeId,
+            enrollmentId,
+            status:"RESERVED"
+        }
+    })
+    return ticket
 }
 
 export const ticketsRepository = {
     getTicketType,
     getTicket,
+    checkUser,
     postTicket
 }
