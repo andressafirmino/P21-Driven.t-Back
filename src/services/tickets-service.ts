@@ -1,3 +1,4 @@
+import { PostTicket } from "@/controllers";
 import { notFoundError } from "@/errors";
 import { ticketsRepository } from "@/repositories"
 
@@ -13,8 +14,8 @@ async function getTicket() {
     return ticket;
 }
 
-async function postTicket() {
-    await ticketsRepository.postTicket()
+async function postTicket(ticketTypeId: PostTicket) {
+    await ticketsRepository.postTicket(ticketTypeId)
 }
 
 export const ticketsService = {

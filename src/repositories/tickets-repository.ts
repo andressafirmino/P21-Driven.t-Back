@@ -1,4 +1,5 @@
 import { prisma } from "@/config"
+import { PostTicket } from "@/controllers";
 import { TicketType } from "@prisma/client"
 
 export type GetTicketType = Omit<TicketType, 'id'>
@@ -32,7 +33,7 @@ async function getTicket() {
     return tickets;
 }
 
-async function postTicket() {
+async function postTicket(ticketTypeId: PostTicket) {
 
 }
 
