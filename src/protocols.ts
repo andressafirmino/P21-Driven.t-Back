@@ -30,3 +30,7 @@ export type CEP = {
 export type PostTicket = {
   ticketTypeId: number
 }
+
+export type TicketId = {
+  ticketId: string
+}

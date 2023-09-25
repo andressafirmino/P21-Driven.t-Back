@@ -1,7 +1,6 @@
 import { prisma } from "@/config"
-import { TicketType } from "@prisma/client"
+import { Prisma, TicketType } from "@prisma/client"
 
-export type GetTicketType = Omit<TicketType, 'id'>
 async function getTicketType() {
     const tickets = await prisma.ticketType.findMany()
     return tickets;
@@ -9,7 +8,7 @@ async function getTicketType() {
 
 async function getTicket(enrollmentId: number) {
     const tickets = await prisma.ticket.findUnique({
-        where: {enrollmentId},
+        where: { enrollmentId },
         select: {
             id: true,
             status: true,
@@ -35,26 +34,47 @@ async function getTicket(enrollmentId: number) {
 
 async function checkUser(userId: number) {
     const user = await prisma.enrollment.aggregate({
-        _count: {userId: true},
-        where: {userId}
+        _count: { userId: true },
+        where: { userId }
     })
     return user;
 }
 
 async function postTicket(enrollmentId: number, ticketTypeId: number) {
     const ticket = await prisma.ticket.create({
-        data:{
+        data: {
             ticketTypeId,
             enrollmentId,
-            status:"RESERVED"
+            status: "RESERVED"
         }
     })
     return ticket
+}
+
+async function getTicketById(ticketId: number) {
+    const ticket = await prisma.ticket.findUnique({
+        where: { id: ticketId }
+    })
+    return ticket;
+}
+
+async function getTicketByUserId(userId: number, ticketId: number) {
+    const ticket = await prisma.$queryRaw(
+        Prisma.sql`
+        SELECT t.id, e."userId"
+        FROM ticket as t
+        JOIN enrollment as e ON t.id = $1
+        WHERE e."userId" = $2
+        `, [ticketId, userId]
+    )
+    return ticket;
 }
 
 export const ticketsRepository = {
     getTicketType,
     getTicket,
     checkUser,
-    postTicket
+    postTicket,
+    getTicketById,
+    getTicketByUserId
 }
