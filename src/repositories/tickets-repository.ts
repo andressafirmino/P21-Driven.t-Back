@@ -1,5 +1,5 @@
 import { prisma } from "@/config"
-import { Prisma, TicketType } from "@prisma/client"
+import { Prisma, TicketStatus, TicketType } from "@prisma/client"
 
 async function getTicketType() {
     const tickets = await prisma.ticketType.findMany()
@@ -35,7 +35,7 @@ async function getTicket(enrollmentId: number) {
 async function checkUser(userId: number) {
     const user = await prisma.enrollment.aggregate({
         _count: { userId: true },
-        where: { userId }
+        where: { userId },
     })
     return user;
 }
@@ -46,34 +46,32 @@ async function postTicket(enrollmentId: number, ticketTypeId: number) {
             ticketTypeId,
             enrollmentId,
             status: "RESERVED"
-        }
+        },
+        include: { TicketType: true },
     })
     return ticket
 }
 
 async function getTicketById(ticketId: number) {
     const ticket = await prisma.ticket.findUnique({
-        where: { id: ticketId }
+        where: { id: ticketId },
+        include: { TicketType: true }
     })
     return ticket;
 }
 
-async function getTicketByUserId(userId: number, ticketId: number) {
-    const ticket = await prisma.$queryRaw(
-        Prisma.sql`
-  SELECT
-    "Ticket".*
-  FROM
-    "Enrollment"
-  INNER JOIN
-    "Ticket" ON "Enrollment"."id" = "Ticket"."enrollmentId"
-  WHERE
-    "Enrollment"."userId" = ${userId}
-    AND
-    "Ticket"."id" = ${ticketId}
-;`)
-    return ticket;
-}
+async function ticketProcessPayment(ticketId: number) {
+    const result = prisma.ticket.update({
+      where: {
+        id: ticketId,
+      },
+      data: {
+        status: TicketStatus.PAID,
+      },
+    });
+  
+    return result;
+  }
 
 export const ticketsRepository = {
     getTicketType,
@@ -81,5 +79,5 @@ export const ticketsRepository = {
     checkUser,
     postTicket,
     getTicketById,
-    getTicketByUserId
+    ticketProcessPayment
 }

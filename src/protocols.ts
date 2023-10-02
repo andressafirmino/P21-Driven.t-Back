@@ -1,3 +1,4 @@
+import { Payment } from "@prisma/client";
 import { type } from "os";
 
 export type ApplicationError = {
@@ -47,3 +48,13 @@ export type PaymentProcess = {
     cvv: number
   }
 }
+
+export type CardPaymentParams = {
+  issuer: string;
+  number: number;
+  name: string;
+  expirationDate: Date;
+  cvv: number;
+};
+
+export type PaymentParams = Omit<Payment, 'id' | 'createdAt' | 'updatedAt'>;

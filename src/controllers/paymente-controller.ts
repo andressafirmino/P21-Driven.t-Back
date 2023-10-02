@@ -13,8 +13,9 @@ async function getPayment(req: AuthenticatedRequest, res: Response) {
 }
 
 async function postPayment(req: AuthenticatedRequest, res: Response) {
-    const body = req.body as PaymentProcess;
-    const payment = await paymentService.postPayment(body);
+    const userId = req.userId;
+    const {ticketId, cardData} = req.body as PaymentProcess;
+    const payment = await paymentService.postPayment(ticketId, userId, cardData);
     res.status(httpStatus.OK).send(payment);
 }
 
