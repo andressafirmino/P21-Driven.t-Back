@@ -1,5 +1,5 @@
 import { prisma } from "@/config"
-import { PaymentParams, PaymentProcess } from "@/protocols";
+import { PaymentParams} from "@/protocols";
 
 
 

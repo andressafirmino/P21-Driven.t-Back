@@ -1,5 +1,4 @@
 import { Payment, Ticket } from '@prisma/client';
-import { type } from "os";
 
 export type ApplicationError = {
   name: string;
@@ -50,3 +49,4 @@ export type InputPaymentBody = {
 };
 
 export type PaymentParams = Omit<Payment, 'id' | 'createdAt' | 'updatedAt'>;
+
