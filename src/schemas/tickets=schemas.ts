@@ -1,7 +1,6 @@
-import { PostTicket } from "@/protocols";
 import Joi from "joi";
 
 
-export const postTicketSchema = Joi.object<PostTicket>({
+export const postTicketSchema = Joi.object({
     ticketTypeId: Joi.number().positive().required()
 })
