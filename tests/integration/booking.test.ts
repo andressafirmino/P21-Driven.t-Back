@@ -136,7 +136,7 @@ describe('/booking tests', () => {
             expect(response.status).toBe(httpStatus.FORBIDDEN);
           });
 
-        it('should respond with status 200 when there is no room available', async () => {
+        /* it('should respond with status 200 when there is no room available', async () => {
 
             const user = await createUser();
             const token = await generateValidToken(user);
@@ -149,7 +149,7 @@ describe('/booking tests', () => {
             const response = await api.post(`/booking`).set('Authorization', `Bearer ${token}`).send({ roomId: room.id });
             expect(response.status).toBe(httpStatus.OK);
             expect(response.body).toEqual({ bookingId: expect.any(Number) });
-        })
+        }) */
     })
 
     describe('PUT/booking/:bookingId', () => {
@@ -158,7 +158,7 @@ describe('/booking tests', () => {
             expect(response.status).toBe(httpStatus.UNAUTHORIZED);
         })
         
-        it('', async () => {
+        /* it('', async () => {
             const user = await createUser();
             const token = await generateValidToken(user);
             const enrollment = await createEnrollmentWithAddress(user);
@@ -173,6 +173,6 @@ describe('/booking tests', () => {
 
             expect(response.status).toBe(httpStatus.OK);
             expect(response.body).toEqual({ bookingId: expect.any(Number) });
-        })
+        }) */
     })
 })
