@@ -1,23 +1,52 @@
-import { notFoundError, requestError } from "@/errors";
+import { forbiddenError, notFoundError, paymentError, requestError } from "@/errors";
+import { enrollmentRepository, ticketsRepository } from "@/repositories";
 import bookingRepository from "@/repositories/booking-repository";
+import hotelsRepository from "@/repositories/hotels-repository";
+import { roomRepository } from "@/repositories/room-repository";
+import { TicketStatus } from "@prisma/client";
 import httpStatus from "http-status";
 
 async function getBooking(userId: number) {
-    if(!userId || isNaN(userId)) throw requestError(httpStatus.BAD_REQUEST, 'Invalid userId');
+    if (!userId || isNaN(userId)) throw requestError(httpStatus.BAD_REQUEST, 'Invalid userId');
 
     const booking = await bookingRepository.getBooking(userId);
-    if(!booking) throw notFoundError();
+    if (!booking) throw notFoundError();
 
     return booking;
-    
+
 }
 
-async function postBooking() {
-    
+async function verifyUser(userId: number) {
+    const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
+    if (!enrollment) throw notFoundError();
+
+    const ticket = await ticketsRepository.getTicketByEnrollmentId(enrollment.id);
+    if (!ticket) throw notFoundError();
+
+
+
+    const ticketInfo = await ticketsRepository.getTicketById(ticket.id);
+    if (ticketInfo.status !== TicketStatus.PAID || ticketInfo.TicketType.isRemote || !ticketInfo.TicketType.includesHotel) throw forbiddenError();
+
+    return;
+}
+
+
+async function postBooking(userId: number, roomId: number) {
+    await verifyUser(userId);
+    const room = await roomRepository.getRoomById(roomId);
+    if (!room) throw notFoundError();
+
+    const capacity = await roomRepository.getAllRoomById(roomId);
+    if(capacity <= room.capacity) throw forbiddenError();
+
+    const booking = await bookingRepository.postBooking(userId, roomId);
+
+    return booking;
 }
 
 async function putBooking() {
-    
+
 }
 
 const bookingService = {

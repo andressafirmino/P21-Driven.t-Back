@@ -9,8 +9,14 @@ async function getBooking(userId: number) {
     return booking;
 }
 
-async function postBooking() {
-
+async function postBooking(userId: number, roomId: number) {
+    const booking = await prisma.booking.create({
+        data: {
+            userId,
+            roomId
+        }
+    })
+    return booking;
 }
 
 async function putBooking() {

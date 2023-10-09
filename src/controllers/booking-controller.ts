@@ -10,11 +10,14 @@ async function getBooking(req: AuthenticatedRequest, res: Response) {
 }
 
 async function postBooking(req: AuthenticatedRequest, res: Response) {
-    
+    const userId = req.userId;
+    const { roomId } = req.body;
+    const booking = await bookingService.postBooking(userId, roomId);
+    return res.status(httpStatus.OK).send({"bookingId": booking.id});
 }
 
 async function putBooking(req: AuthenticatedRequest, res: Response) {
-    
+
 }
 
 const bookingController = {
