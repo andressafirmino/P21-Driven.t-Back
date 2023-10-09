@@ -23,10 +23,8 @@ async function verifyUser(userId: number) {
     const ticket = await ticketsRepository.getTicketByEnrollmentId(enrollment.id);
     if (!ticket) throw notFoundError();
 
-
-
-    //const ticketInfo = await ticketsRepository.getTicketById(ticket.id);
-    if (ticket.status !== TicketStatus.PAID || ticket.TicketType.isRemote || !ticket.TicketType.includesHotel) throw forbiddenError();
+    const ticketInfo = await ticketsRepository.getTicketById(ticket.id);
+    if (ticketInfo.status !== TicketStatus.PAID || ticketInfo.TicketType.isRemote || !ticketInfo.TicketType.includesHotel) throw forbiddenError();
 
     return;
 }
