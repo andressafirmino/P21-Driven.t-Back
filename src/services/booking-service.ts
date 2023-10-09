@@ -16,22 +16,17 @@ async function getBooking(userId: number) {
 
 }
 
-async function verifyUser(userId: number) {
+
+async function postBooking(userId: number, roomId: number) {
     const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
     if (!enrollment) throw notFoundError();
 
     const ticket = await ticketsRepository.getTicketByEnrollmentId(enrollment.id);
     if (!ticket) throw notFoundError();
 
-    const ticketInfo = await ticketsRepository.getTicketById(ticket.id);
-    if (ticketInfo.status !== TicketStatus.PAID || ticketInfo.TicketType.isRemote || !ticketInfo.TicketType.includesHotel) throw forbiddenError();
+    //const ticketInfo = await ticketsRepository.getTicketById(ticket.id);
+    if (ticket.status !== TicketStatus.PAID || ticket.TicketType.isRemote || !ticket.TicketType.includesHotel) throw forbiddenError();
 
-    return;
-}
-
-
-async function postBooking(userId: number, roomId: number) {
-    await verifyUser(userId);
     const room = await roomRepository.getRoomById(roomId);
     if (!room) throw notFoundError();
 
@@ -46,7 +41,7 @@ async function postBooking(userId: number, roomId: number) {
 async function putBooking(userId: number, roomId: number, bookingId: string) {
     const id = parseInt(bookingId);
 
-    if (isNaN(id)) throw requestError(httpStatus.BAD_REQUEST, 'Invalid userId');
+    if (!id) throw requestError(httpStatus.BAD_REQUEST, 'Invalid userId');
 
     const room = await roomRepository.getRoomById(roomId);
     if (!room) throw notFoundError();

@@ -146,6 +146,7 @@ describe('/booking tests', () => {
             const payment = await createPayment(ticket.id, ticketType.price);
             const hotel = await createHotel();
             const room = await createRoom(hotel.id);
+
             const response = await api.post(`/booking`).set('Authorization', `Bearer ${token}`).send({ roomId: room.id });
             expect(response.status).toBe(httpStatus.OK);
             expect(response.body).toEqual({ bookingId: expect.any(Number) });
