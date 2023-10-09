@@ -20,7 +20,7 @@ async function postBooking(req: AuthenticatedRequest, res: Response) {
 async function putBooking(req: AuthenticatedRequest, res: Response) {
     const userId = req.userId;
     const { roomId } = req.body;
-    const { bookingId} = req.query as BookingId;
+    const { bookingId} = req.params as BookingId;
     const booking = await bookingService.putBooking(userId, roomId, bookingId);
     return res.status(httpStatus.OK).send({"bookingId": booking.id});
 }
