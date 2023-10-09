@@ -1,10 +1,10 @@
 
-async function createBooking() {
-
+export async function createBooking(userId?: number, roomId?: number) {
+    return {
+        data: {
+            userId,
+            roomId
+        }
+    }
 }
 
-const bookingFactory = {
-    createBooking
-}
-
-export { bookingFactory };
