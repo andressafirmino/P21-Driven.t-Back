@@ -25,8 +25,8 @@ async function verifyUser(userId: number) {
 
 
 
-    const ticketInfo = await ticketsRepository.getTicketById(ticket.id);
-    if (ticketInfo.status !== TicketStatus.PAID || ticketInfo.TicketType.isRemote || !ticketInfo.TicketType.includesHotel) throw forbiddenError();
+    //const ticketInfo = await ticketsRepository.getTicketById(ticket.id);
+    if (ticket.status !== TicketStatus.PAID || ticket.TicketType.isRemote || !ticket.TicketType.includesHotel) throw forbiddenError();
 
     return;
 }
@@ -60,7 +60,7 @@ async function putBooking(userId: number, roomId: number, bookingId: string) {
     if (!booking) throw forbiddenError();
 
     const bookingUpdate = await bookingRepository.putBooking(roomId, id);
-    if(!bookingUpdate) throw forbiddenError();
+    if (!bookingUpdate) throw forbiddenError();
 
     return bookingUpdate;
 
