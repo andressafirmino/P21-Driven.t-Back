@@ -29,9 +29,8 @@ async function postBooking(userId: number, roomId: number) {
 
     const room = await roomRepository.getRoomById(roomId);
     if (!room) throw notFoundError();
-
-    const capacity = await roomRepository.getAllRoomById(roomId);
-    if (room.capacity <= capacity) throw forbiddenError();
+    const rooms = await bookingRepository.getAllBooking(roomId);
+    if (room.capacity <= rooms) throw forbiddenError();
 
     const booking = await bookingRepository.postBooking(userId, roomId);
 
@@ -47,7 +46,7 @@ async function putBooking(userId: number, roomId: number, bookingId: string) {
     if (!room) throw notFoundError();
 
     const capacity = await roomRepository.getAllRoomById(roomId);
-    if (capacity <= room.capacity) throw forbiddenError();
+    //if (capacity <= room.capacity) throw forbiddenError();
 
     const booking = await bookingRepository.getBooking(userId);
     if (!booking) throw forbiddenError();

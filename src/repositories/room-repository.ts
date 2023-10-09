@@ -1,7 +1,7 @@
 import { prisma } from "@/config";
 
 async function getRoomById(id: number) {
-    const room = await prisma.room.findFirst({
+    const room = await prisma.room.findUnique({
         where: { id },
         select: {
             capacity: true
@@ -13,7 +13,7 @@ async function getRoomById(id: number) {
 
 async function getAllRoomById(id: number) {
     const rooms = await prisma.room.count({
-        where: { id },        
+        where: { id },  
     })
 
     return rooms;

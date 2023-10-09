@@ -30,10 +30,18 @@ async function putBooking(roomId: number, id: number) {
     return booking;
 }
 
+async function getAllBooking(roomId: number) {
+    const booking = await prisma.booking.count({
+        where: { roomId },
+    })
+    return booking;
+}
+
 const bookingRepository = {
     getBooking,
     postBooking,
-    putBooking
+    putBooking,
+    getAllBooking
 }
 
 export default bookingRepository;

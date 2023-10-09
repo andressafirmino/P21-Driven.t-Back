@@ -11,10 +11,10 @@ export async function createHotel() {
     return hotel;
 }
 
-export async function createRoom(hotelId: number, capacity?: number) {
+export async function createRoom(hotelId: number, capacity = 3) {
     const data = {
         name: faker.random.word(),
-        capacity: capacity || 1,
+        capacity: capacity,
         hotelId
       }
     const room = await prisma.room.create({data});

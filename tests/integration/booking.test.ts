@@ -136,7 +136,7 @@ describe('/booking tests', () => {
             expect(response.status).toBe(httpStatus.FORBIDDEN);
           });
 
-        /* it('should respond with status 200 when there is no room available', async () => {
+        it('should respond with status 200 when there is no room available', async () => {
 
             const user = await createUser();
             const token = await generateValidToken(user);
@@ -150,7 +150,7 @@ describe('/booking tests', () => {
             const response = await api.post(`/booking`).set('Authorization', `Bearer ${token}`).send({ roomId: room.id });
             expect(response.status).toBe(httpStatus.OK);
             expect(response.body).toEqual({ bookingId: expect.any(Number) });
-        }) */
+        })
     })
 
     describe('PUT/booking/:bookingId', () => {
@@ -170,7 +170,7 @@ describe('/booking tests', () => {
             const room = await createRoom(hotel.id);
             const room2 = await createRoom(hotel.id);
             const res = await api.post(`/booking`).set('Authorization', `Bearer ${token}`).set('userId', user.id.toString()).send({ roomId: room.id });
-            const response = await api.post(`/booking`).set('Authorization', `Bearer ${token}`).set('userId', user.id.toString()).send({ roomId: room2.id });
+            const response = await api.put(`/booking`).set('Authorization', `Bearer ${token}`).set('userId', user.id.toString()).send({ roomId: room2.id });
 
             expect(response.status).toBe(httpStatus.OK);
             expect(response.body).toEqual({ bookingId: expect.any(Number) });
