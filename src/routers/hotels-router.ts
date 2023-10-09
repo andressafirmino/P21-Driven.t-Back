@@ -9,4 +9,4 @@ hotelsRouter
     .get('/', getHotels)
     .get('/:hotelId', getHotelId)
 
-export default hotelsRouter; 
+export { hotelsRouter }; 
