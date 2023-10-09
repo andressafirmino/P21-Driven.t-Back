@@ -48,7 +48,7 @@ async function postBooking(userId: number, roomId: number) {
 async function putBooking(userId: number, roomId: number, bookingId: string) {
     const id = parseInt(bookingId);
 
-    if (!bookingId || isNaN(id)) throw requestError(httpStatus.BAD_REQUEST, 'Invalid userId');
+    if (isNaN(id)) throw requestError(httpStatus.BAD_REQUEST, 'Invalid userId');
 
     const room = await roomRepository.getRoomById(roomId);
     if (!room) throw notFoundError();
